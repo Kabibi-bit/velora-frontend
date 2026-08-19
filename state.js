@@ -1,6 +1,5 @@
-cat > /home/claude/velora/state.js << 'JSEOF'
 /* ============ VELORA SHARED CORE ============ */
-
+ 
 /* ---- Logo mark: guiding star, navy + gold ---- */
 function veloraMark(size){
   size = size || 32;
@@ -32,7 +31,7 @@ function metisMark(size, fg){
     <path d="M34 20 L22 22.5 L19.5 20 L22 17.5 Z" fill="${fg}" opacity="0.45"/>
   </svg>`;
 }
-
+ 
 /* ---- Starfield background (subtle, shared across pages) ---- */
 function initStarfield(){
   const canvas = document.getElementById('starfield');
@@ -61,15 +60,24 @@ function initStarfield(){
   window.addEventListener('resize', resize);
   resize(); requestAnimationFrame(draw);
 }
-
+ 
 /* ---- Nav ---- */
 function renderNav(activePage){
-  const links = [
-    {id: 'survey', label: 'Survey', href: 'survey.html'},
-    {id: 'dashboard', label: 'Job Search', href: 'dashboard.html'},
-    {id: 'inbox', label: 'Inbox', href: 'inbox.html'},
-  ];
-  const linksHtml = links.map(l => `<a class="nav-link ${l.id===activePage?'active':''}" href="${l.href}">${l.label}</a>`).join('');
+  const role = localStorage.getItem('velora_role') || 'candidate';
+  let links;
+  if(role === 'business'){
+    links = [{id: 'business', label: 'Candidate Search', href: 'business-dashboard.html'}];
+  } else if(role === 'tutor'){
+    links = [{id: 'tutor', label: 'Tutor Dashboard', href: 'tutor-dashboard.html'}];
+  } else {
+    links = [
+      {id: 'survey', label: 'Survey', href: 'survey.html'},
+      {id: 'dashboard', label: 'Job Search', href: 'dashboard.html'},
+      {id: 'inbox', label: 'Inbox', href: 'inbox.html'},
+    ];
+  }
+  const linksHtml = links.map(l => `<a class="nav-link ${l.id===activePage?'active':''}" href="${l.href}">${l.label}</a>`).join('')
+    + `<a class="nav-link" href="index.html">Switch role</a>`;
   const watchActive = localStorage.getItem('velora_watch_active') === 'true';
   const root = document.getElementById('nav-root');
   if(!root) return;
@@ -82,7 +90,7 @@ function renderNav(activePage){
       </div>
     </nav>`;
 }
-
+ 
 /* ---- localStorage helpers ---- */
 function getProfile(){ try{ return JSON.parse(localStorage.getItem('velora_profile')); }catch(e){ return null; } }
 function saveProfile(p){ localStorage.setItem('velora_profile', JSON.stringify(p)); }
@@ -106,7 +114,7 @@ function getRoadmap(){ try{ return JSON.parse(localStorage.getItem('velora_roadm
 function saveRoadmap(r){ localStorage.setItem('velora_roadmap', JSON.stringify(r)); }
 function getOutcomes(){ try{ return JSON.parse(localStorage.getItem('velora_outcomes')) || []; }catch(e){ return []; } }
 function saveOutcomes(o){ localStorage.setItem('velora_outcomes', JSON.stringify(o)); }
-
+ 
 /* ---- Mock listings dataset (now includes 'athletic') ---- */
 const LISTINGS = [
   {id:1, type:'internship', title:'Product Analytics Intern', org:'Northlight Health', tags:['sql','python','a/b testing','analytics','product'], loc:'Remote', deadline:'Aug 22'},
@@ -137,10 +145,10 @@ const LISTINGS = [
   {id:26, type:'athletic', title:'Track & Field Partial Scholarship', org:'Whitfield University', tags:['athletics','track','training','scholarship'], loc:'Remote', deadline:'Oct 5'},
   {id:27, type:'athletic', title:'Student-Athlete Leadership Grant', org:'Bold Futures Fund', tags:['athletics','leadership','grant','mentorship'], loc:'Remote', deadline:'Sep 28'},
 ];
-
+ 
 /* ---- Matching engine ---- */
 function tokenize(str){ return (str.toLowerCase().match(/[a-z][a-z\-]{2,}/g) || []); }
-
+ 
 function scoreListing(listing, goalTokens, skillTokens, priorities, dealbreakers){
   if(dealbreakers && listing.tags.some(t=> dealbreakers.includes(t))) return null;
   const tagSet = listing.tags;
@@ -180,7 +188,7 @@ function runMatchCycle(profile){
   return scored;
 }
 function typeBadgeLabel(t){ return t==='job'?'Job':t==='internship'?'Internship':t==='athletic'?'Athletics':'College / Fellowship'; }
-
+ 
 /* ---- Roadmap generation (client-side heuristic mirroring the backend's design) ---- */
 function generateRoadmapLocal(profile){
   const stage = profile.stage;
@@ -204,7 +212,7 @@ function generateRoadmapLocal(profile){
   }
   return steps.map((s, i) => ({...s, stage: i + 1}));
 }
-
+ 
 /* ---- Metis floating widget (shared include, used on every logged-in page) ---- */
 function injectMetisWidget(systemContextFn){
   const container = document.createElement('div');
@@ -228,7 +236,7 @@ function injectMetisWidget(systemContextFn){
       </div>
     </div>`;
   document.body.appendChild(container);
-
+ 
   const chatLauncher = document.getElementById('chatLauncher');
   const chatWindow = document.getElementById('chatWindow');
   const chatClose = document.getElementById('chatClose');
@@ -237,14 +245,14 @@ function injectMetisWidget(systemContextFn){
   const chatSend = document.getElementById('chatSend');
   let chatHistory = getChatHistory();
   let open = false;
-
+ 
   chatLauncher.addEventListener('click', ()=>{ open = !open; chatWindow.classList.toggle('open', open); if(open) chatInput.focus(); });
   chatClose.addEventListener('click', ()=>{ open = false; chatWindow.classList.remove('open'); });
   chatInput.addEventListener('input', ()=>{ chatInput.style.height='auto'; chatInput.style.height = Math.min(100, chatInput.scrollHeight)+'px'; });
   chatInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); handleSend(); } });
   chatSend.addEventListener('click', handleSend);
   document.querySelectorAll('.chat-suggestion').forEach(btn=> btn.addEventListener('click', ()=>{ chatInput.value = btn.dataset.q; handleSend(); }));
-
+ 
   function escapeHtml(str){ const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
   function renderMarkdownLite(text){
     const escaped = escapeHtml(text);
@@ -271,7 +279,7 @@ function injectMetisWidget(systemContextFn){
     chatMessages.appendChild(wrap); chatMessages.scrollTop = chatMessages.scrollHeight;
   }
   function removeTyping(){ const el = document.getElementById('typingIndicator'); if(el) el.remove(); }
-
+ 
   async function handleSend(){
     const text = chatInput.value.trim();
     if(!text) return;
@@ -298,5 +306,4 @@ function injectMetisWidget(systemContextFn){
     } finally { chatSend.disabled = false; }
   }
 }
-JSEOF
-python3 -c "print('checking JS file readable:', len(open('/home/claude/velora/state.js').read()), 'bytes')"
+ 
