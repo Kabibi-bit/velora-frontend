@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metis — Velora</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.chat-shell{ max-width: 760px; margin: 0 auto; display:flex; flex-direction:column; height: calc(100vh - 220px); min-height: 480px; }
+.chat-messages{ flex:1; overflow-y:auto; padding: 8px 4px 24px; display:flex; flex-direction:column; gap:16px; }
+.chat-msg{ display:flex; flex-direction:column; gap:5px; max-width: 82%; }
+.chat-msg.user{ align-self:flex-end; align-items:flex-end; }
+.chat-msg.assistant{ align-self:flex-start; align-items:flex-start; }
+.chat-bubble{ padding: 13px 16px; border-radius: 14px; font-size: 14.5px; line-height:1.6; }
+.chat-msg.user .chat-bubble{ background: var(--silver-dim); border:1px solid rgba(211,213,218,0.3); color: var(--text); border-bottom-right-radius:3px; }
+.chat-msg.assistant .chat-bubble{ background: var(--panel-2); border:1px solid var(--line); color: var(--text); border-bottom-left-radius:3px; }
+.chat-bubble p{ margin: 0 0 8px; } .chat-bubble p:last-child{ margin-bottom:0; }
+.chat-bubble strong{ color: var(--silver); }
+.chat-bubble ul{ margin:6px 0; padding-left:18px; } .chat-bubble li{ margin-bottom:4px; }
+.chat-msg-label{ font-family:'JetBrains Mono', monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.05em; color: var(--text-faint); }
+.chat-typing{ display:flex; gap:4px; padding: 13px 16px; }
+.chat-typing span{ width:6px; height:6px; border-radius:50%; background: var(--text-faint); animation: typingBounce 1.2s infinite; }
+.chat-typing span:nth-child(2){ animation-delay: .15s; } .chat-typing span:nth-child(3){ animation-delay: .3s; }
+@keyframes typingBounce{ 0%,60%,100%{ transform: translateY(0); opacity:0.5; } 30%{ transform: translateY(-4px); opacity:1; } }
+.chat-suggestions{ display:flex; flex-wrap:wrap; gap:8px; padding: 4px 4px 16px; }
+.chat-suggestion{ font-family:'JetBrains Mono', monospace; font-size:11px; padding:7px 13px; border-radius:999px; border:1px solid var(--line); color: var(--text-dim); cursor:pointer; transition: all .15s ease; background:none; }
+.chat-suggestion:hover{ border-color: var(--silver); color: var(--silver); }
+.chat-input-row{ display:flex; gap:10px; padding: 14px 4px 4px; border-top:1px solid var(--line-soft); }
+.chat-input-row textarea{ flex:1; min-height:46px; max-height:120px; padding:12px 14px; font-size:14.5px; font-family:'Manrope',sans-serif; }
+.chat-send{ background: linear-gradient(135deg, #E8E9EC, #B9BBC1); color:#0C0D10; border:none; border-radius: var(--radius-sm); width:46px; height:46px; flex-shrink:0; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; transition: filter .15s ease; }
+.chat-send:hover{ filter: brightness(1.1); }
+.chat-send:disabled{ opacity:0.5; cursor:default; }
+.metis-mark{ display:flex; justify-content:center; margin-bottom: 14px; }
+</style>
+</head>
+<body>
+
+<div id="nav-root"></div>
+
+<div class="wrap">
+  <div class="page">
+    <div class="page-head" style="text-align:center; max-width:640px; margin:0 auto 26px;">
+      <div class="metis-mark" id="metisMark"></div>
+      <div class="eyebrow" style="text-align:center;">Your AI career guide</div>
+      <h1 style="text-align:center;">Metis</h1>
+      <p style="margin:0 auto;">Named for the Titaness of wisdom and deep counsel. Ask about applications, resumes, outreach, or which of your current matches to prioritize.</p>
+    </div>
+
+    <div class="chat-shell">
+      <div class="chat-messages" id="chatMessages">
+        <div class="chat-msg assistant">
+          <span class="chat-msg-label">Metis</span>
+          <div class="chat-bubble">Hi — I can answer questions about internships, applications, resumes, or your current matches. What's on your mind?</div>
+        </div>
+      </div>
+      <div class="chat-suggestions" id="chatSuggestions">
+        <button class="chat-suggestion" data-q="What should I put in a cold outreach email for an internship?">Cold outreach tips</button>
+        <button class="chat-suggestion" data-q="How far in advance should I apply for summer internships?">Application timing</button>
+        <button class="chat-suggestion" data-q="Which of my current matches should I prioritize applying to first?">Prioritize my matches</button>
+      </div>
+      <div class="chat-input-row">
+        <textarea id="chatInput" placeholder="Ask Metis about internships, applications, resumes…" rows="1"></textarea>
+        <button class="chat-send" id="chatSend" aria-label="Send">➤</button>
+      </div>
+    </div>
+  </div>
+  <footer>Velora is a demo - listings shown are illustrative, not live postings.</footer>
+</div>
+
+<script src="state.js"></script>
+<script>
+renderNav('metis');
+document.getElementById('metisMark').innerHTML = veloraMark(48);
+
+const profile = getProfile();
+const lastScored = getMatches();
+
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const chatSend = document.getElementById('chatSend');
+const chatSuggestions = document.getElementById('chatSuggestions');
+
+let chatHistory = getChatHistory();
+// Replay any prior conversation on page load
+chatHistory.forEach(m => appendMessage(m.role, m.content, false));
+
+chatInput.addEventListener('input', ()=>{ chatInput.style.height='auto'; chatInput.style.height = Math.min(120, chatInput.scrollHeight)+'px'; });
+chatInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); handleSend(); } });
+chatSend.addEventListener('click', handleSend);
+chatSuggestions.querySelectorAll('.chat-suggestion').forEach(btn=>{
+  btn.addEventListener('click', ()=>{ chatInput.value = btn.dataset.q; handleSend(); });
+});
+
+function escapeHtml(str){ const d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+function renderMarkdownLite(text){
+  const escaped = escapeHtml(text);
+  const lines = escaped.split('\n');
+  let html = '', inList = false;
+  lines.forEach(line=>{
+    const trimmed = line.trim();
+    if(/^[-*]\s+/.test(trimmed)){ if(!inList){ html += '<ul>'; inList = true; } html += `<li>${trimmed.replace(/^[-*]\s+/, '')}</li>`; }
+    else { if(inList){ html += '</ul>'; inList = false; } if(trimmed.length) html += `<p>${trimmed}</p>`; }
+  });
+  if(inList) html += '</ul>';
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  return html || '<p></p>';
+}
+
+function appendMessage(role, text, scroll=true){
+  const wrap = document.createElement('div');
+  wrap.className = 'chat-msg ' + role;
+  wrap.innerHTML = `<span class="chat-msg-label">${role==='user' ? 'You' : 'Metis'}</span><div class="chat-bubble">${renderMarkdownLite(text)}</div>`;
+  chatMessages.appendChild(wrap);
+  if(scroll) chatMessages.scrollTop = chatMessages.scrollHeight;
+  return wrap;
+}
+function appendTyping(){
+  const wrap = document.createElement('div');
+  wrap.className = 'chat-msg assistant'; wrap.id = 'typingIndicator';
+  wrap.innerHTML = `<span class="chat-msg-label">Metis</span><div class="chat-bubble chat-typing"><span></span><span></span><span></span></div>`;
+  chatMessages.appendChild(wrap); chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+function removeTyping(){ const el = document.getElementById('typingIndicator'); if(el) el.remove(); }
+
+function buildSystemContext(){
+  let ctx = `You are Metis, the built-in career guide inside "Velora", an internship/job/college-opportunity watch app. You are named for the Greek titaness of wisdom and deep counsel. Answer questions about internships, job searching, applications, resumes, cover letters, outreach, and career strategy. Be concise, practical, and warm - a few short paragraphs or a short bullet list at most, no long essays. Use **bold** sparingly for key terms and "- " for bullet lists when helpful.\n\n`;
+  if(profile){
+    ctx += `The user's stated goal: "${profile.northstar}". What "made it" looks like to them: "${profile.finalidea}". Timeframe: ${profile.timeframe}. Current stage: ${profile.stage}. Priorities: ${profile.priorities.join(', ')}. Skills/experience: "${profile.skills}". Deal-breakers: "${profile.dealbreakers}". Location preference: "${profile.loc}".\n\n`;
+  }
+  if(lastScored && lastScored.length){
+    ctx += `Their current top-ranked matches (title - org - type - match% - deadline):\n`;
+    lastScored.slice(0,8).forEach(l=>{ ctx += `- ${l.title} - ${l.org} - ${typeBadgeLabel(l.type)} - ${l.pct}% match - due ${l.deadline}\n`; });
+    ctx += `\nIf asked which to prioritize, reason using these matches and their deadlines/scores specifically.\n`;
+  }
+  ctx += `\nAll listings are illustrative demo data, not live postings - if asked to actually apply, clarify this is a demo.`;
+  return ctx;
+}
+
+async function handleSend(){
+  const text = chatInput.value.trim();
+  if(!text) return;
+  chatInput.value = ''; chatInput.style.height = 'auto';
+  chatSend.disabled = true;
+
+  appendMessage('user', text);
+  chatHistory.push({role:'user', content: text});
+  appendTyping();
+
+  try{
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1000, system: buildSystemContext(), messages: chatHistory })
+    });
+    const data = await response.json();
+    removeTyping();
+    const reply = (data.content || []).map(b=> b.type==='text' ? b.text : '').filter(Boolean).join('\n');
+    if(!reply){ throw new Error('Empty response'); }
+    appendMessage('assistant', reply);
+    chatHistory.push({role:'assistant', content: reply});
+    saveChatHistory(chatHistory);
+  } catch(err){
+    removeTyping();
+    appendMessage('assistant', "Something went wrong reaching Metis just now - mind trying that again in a moment?");
+    console.error('Chat error:', err);
+  } finally {
+    chatSend.disabled = false;
+  }
+}
+</script>
+</body>
+</html>

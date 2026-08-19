@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velora — The system behind your career</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.hero{ padding: 80px 0 60px; text-align:center; }
+.hero-mark{ margin-bottom: 28px; display:flex; justify-content:center; }
+.hero h1{
+  font-family:'Sora', sans-serif; font-weight: 800; font-size: 48px; letter-spacing:-0.02em;
+  margin: 0 0 18px; line-height: 1.1;
+}
+.hero h1 .grad{
+  background: linear-gradient(135deg, #F1F1EF 0%, #D3D5DA 40%, #7A7C82 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero p{ font-family:'Manrope', sans-serif; font-size: 17px; color: var(--text-dim); max-width: 560px; margin: 0 auto 36px; line-height: 1.6; }
+.hero-ctas{ display:flex; gap: 12px; justify-content:center; flex-wrap:wrap; }
+
+.feature-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 70px; }
+@media (max-width: 900px){ .feature-grid{ grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px){ .feature-grid{ grid-template-columns: 1fr; } }
+.feature-card{
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px;
+  transition: border-color .2s ease, transform .2s ease;
+}
+.feature-card:hover{ border-color: var(--steel); transform: translateY(-2px); }
+.feature-card .fnum{ font-family:'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); margin-bottom: 14px; }
+.feature-card h3{ font-family:'Sora', sans-serif; font-size: 16px; font-weight: 700; margin: 0 0 8px; }
+.feature-card p{ font-family:'Manrope', sans-serif; font-size: 13.5px; color: var(--text-dim); line-height: 1.55; margin: 0 0 16px; }
+.feature-card a{ font-family:'JetBrains Mono', monospace; font-size: 11px; color: var(--silver); text-transform: uppercase; letter-spacing: 0.04em; }
+.feature-card a:hover{ color: var(--text); }
+
+.belt{ margin-top: 70px; padding: 34px 0; border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); }
+.belt-inner{ display:flex; justify-content:space-between; gap: 20px; flex-wrap: wrap; font-family:'JetBrains Mono', monospace; font-size: 11.5px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.05em; }
+</style>
+</head>
+<body>
+
+<div id="nav-root"></div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-mark" id="heroMark"></div>
+    <h1>The system behind<br><span class="grad">your career</span>, not just<br>your next search.</h1>
+    <p>Velora watches the job, internship, and college landscape continuously, scores every opportunity against your actual long-term goal, and explains exactly why - so you always know what to do next.</p>
+    <div class="hero-ctas">
+      <a class="btn" href="survey.html">Start your survey →</a>
+      <a class="btn ghost" href="dashboard.html">Explore job search</a>
+    </div>
+  </div>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="fnum">01</div>
+      <h3>Survey</h3>
+      <p>Tell Velora your goal, skills, timeframe, and what matters most. Every match gets scored against this, once.</p>
+      <a href="survey.html">Begin →</a>
+    </div>
+    <div class="feature-card">
+      <div class="fnum">02</div>
+      <h3>Job Search</h3>
+      <p>A continuous watch across jobs, internships, and college programs - ranked, explained, and never a black box.</p>
+      <a href="dashboard.html">Open watch →</a>
+    </div>
+    <div class="feature-card">
+      <div class="fnum">03</div>
+      <h3>Metis</h3>
+      <p>Your AI career guide. Ask about applications, resumes, outreach, or which of your matches to prioritize.</p>
+      <a href="metis.html">Ask Metis →</a>
+    </div>
+    <div class="feature-card">
+      <div class="fnum">04</div>
+      <h3>Inbox</h3>
+      <p>Everything Velora finds while you're away - new matches, closing deadlines, and scan activity in one place.</p>
+      <a href="inbox.html">View inbox →</a>
+    </div>
+  </div>
+
+  <div class="belt">
+    <div class="belt-inner">
+      <span>Jobs · Internships · College &amp; Fellowships</span>
+      <span>Continuous watch, not one-time search</span>
+      <span>Every match, explained</span>
+    </div>
+  </div>
+
+  <footer>Velora is a demo - listings shown are illustrative, not live postings.</footer>
+</div>
+
+<script src="state.js"></script>
+<script>
+  renderNav('home');
+  document.getElementById('heroMark').innerHTML = veloraMark(64);
+</script>
+</body>
+</html>
