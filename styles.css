@@ -1,0 +1,131 @@
+cat > /home/claude/velora/styles.css << 'CSSEOF'
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --black: #08080A;
+  --panel: #131316;
+  --panel-2: #1A1A1E;
+  --line: #29292E;
+  --line-soft: #1B1B1F;
+  --text: #F5F3EE;
+  --text-dim: #A8A6A0;
+  --text-faint: #6B6963;
+  --gold: #E8B368;
+  --gold-dim: rgba(232,179,104,0.15);
+  --aurora: #7FD9A8;
+  --aurora-dim: rgba(127,217,168,0.14);
+  --comet: #94AEFF;
+  --comet-dim: rgba(148,174,255,0.14);
+  --danger: #E8896F;
+  --danger-dim: rgba(232,137,111,0.15);
+  --radius: 18px;
+  --radius-sm: 12px;
+}
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+body{
+  margin:0;
+  background: var(--black);
+  background-image:
+    radial-gradient(ellipse 900px 550px at 15% -10%, rgba(232,179,104,0.06), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 100% 20%, rgba(127,217,168,0.04), transparent 55%);
+  color: var(--text);
+  font-family: 'Manrope', sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+::selection{ background: var(--gold-dim); color: var(--gold); }
+a{ color: inherit; text-decoration: none; }
+
+.wrap{ max-width: 1200px; margin: 0 auto; padding: 0 28px; }
+
+/* ============ NAV ============ */
+.nav{
+  border-bottom: 1px solid var(--line-soft);
+  padding: 20px 0;
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(8,8,10,0.85);
+  backdrop-filter: blur(12px);
+}
+.nav-inner{ display:flex; align-items:center; justify-content:space-between; gap: 24px; flex-wrap: wrap; }
+.logo{ display:flex; align-items:center; gap:11px; }
+.logo svg{ width: 30px; height: 30px; flex-shrink:0; }
+.logo-word{
+  font-family:'Fraunces', serif; font-weight:600; font-size: 19px; letter-spacing: 0.01em; color: var(--text);
+}
+.logo-word em{ font-style: italic; color: var(--gold); font-weight: 500; }
+.nav-links{ display:flex; gap: 6px; flex-wrap: wrap; }
+.nav-link{
+  font-family:'Manrope', sans-serif; font-size: 13.5px; font-weight: 600;
+  padding: 9px 16px; border-radius: 999px; color: var(--text-dim); transition: all .15s ease; border: 1px solid transparent;
+}
+.nav-link:hover{ color: var(--text); background: var(--panel); }
+.nav-link.active{ color: var(--gold); border-color: rgba(232,179,104,0.3); background: var(--gold-dim); }
+.nav-status{ display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); }
+.nav-status .dot{ width:7px; height:7px; border-radius:50%; background: var(--line); }
+.nav-status .dot.live{ background: var(--aurora); box-shadow: 0 0 8px rgba(127,217,168,0.7); }
+
+/* ============ SHARED PAGE ELEMENTS ============ */
+.page{ padding: 52px 0 100px; }
+.page-head{ margin-bottom: 36px; }
+.page-head .eyebrow{ font-family:'Manrope', sans-serif; font-size: 12.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.page-head h1{ font-family:'Fraunces', serif; font-weight: 600; font-size: 38px; margin: 0 0 12px; letter-spacing: -0.01em; }
+.page-head p{ font-family:'Manrope', sans-serif; font-size: 15.5px; color: var(--text-dim); max-width: 560px; line-height: 1.65; margin:0; }
+
+.panel{ background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
+.panel + .panel{ margin-top:18px; }
+.panel h2{ font-family:'Manrope', sans-serif; font-size: 14px; font-weight:700; letter-spacing:0.01em; color: var(--text); margin: 0 0 4px; }
+.panel .sub{ font-family:'Manrope', sans-serif; font-size:12.5px; color:var(--text-faint); margin: 0 0 18px; line-height:1.5; }
+
+label{ display:block; font-family:'Manrope', sans-serif; font-size: 11.5px; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; color: var(--text-dim); margin: 18px 0 8px; }
+label:first-of-type{ margin-top:0; }
+input[type=text], textarea{
+  width:100%; background: var(--black); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  color: var(--text); font-family:'Manrope', sans-serif; font-size: 14.5px; padding: 12px 14px; resize: vertical;
+  transition: border-color .15s ease;
+}
+textarea{ min-height: 66px; line-height:1.55; }
+input[type=text]:focus, textarea:focus{ outline: none; border-color: var(--gold); }
+input[type=text]::placeholder, textarea::placeholder{ color: var(--text-faint); }
+
+.chip-row{ display:flex; flex-wrap:wrap; gap:8px; }
+.chip{ font-family:'Manrope', sans-serif; font-size: 12.5px; font-weight: 600; padding: 8px 15px; border-radius: 999px; border: 1px solid var(--line); color: var(--text-dim); cursor:pointer; user-select:none; transition: all .15s ease; background: none; }
+.chip:hover{ border-color: var(--text-faint); }
+.chip.active{ border-color: var(--aurora); color: var(--aurora); background: var(--aurora-dim); }
+.chip:focus-visible, .btn:focus-visible, .icon-btn:focus-visible{ outline: 2px solid var(--gold); outline-offset:2px; }
+
+.btn{
+  background: linear-gradient(135deg, #F0C688, #D89A4E); color: #241704; border: none;
+  border-radius: var(--radius-sm); font-family:'Manrope', sans-serif; font-weight:800; font-size: 14.5px;
+  letter-spacing:0.01em; padding: 14px 22px; cursor:pointer; transition: filter .15s ease, transform .1s ease;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.btn:hover{ filter: brightness(1.07); }
+.btn:active{ transform: translateY(1px); }
+.btn:disabled{ opacity:0.5; cursor:default; }
+.btn.block{ width:100%; margin-top: 22px; justify-content:center; }
+.btn.stop{ background: transparent; border:1px solid var(--danger); color: var(--danger); }
+.btn.stop:hover{ background: var(--danger-dim); filter:none; }
+.btn.ghost{ background:transparent; border:1px solid var(--line); color: var(--text-dim); }
+.btn.ghost:hover{ border-color: var(--text-faint); color: var(--text); filter:none; }
+
+.hint{ font-family:'Manrope', sans-serif; font-size: 12px; color: var(--text-faint); margin-top: 12px; line-height:1.6; }
+
+.badge{ font-family:'JetBrains Mono', monospace; font-size: 10px; text-transform:uppercase; letter-spacing:0.04em; padding: 4px 10px; border-radius: 999px; border:1px solid var(--line); color: var(--text-dim); white-space:nowrap; }
+.badge.type-job{ color:var(--gold); border-color: rgba(232,179,104,0.4); background: var(--gold-dim); }
+.badge.type-internship{ color:var(--aurora); border-color: rgba(127,217,168,0.4); background: var(--aurora-dim); }
+.badge.type-college{ color:var(--comet); border-color: rgba(148,174,255,0.4); background: var(--comet-dim); }
+.badge.deadline{ color: var(--danger); border-color: rgba(232,137,111,0.45); background: var(--danger-dim); }
+.badge.new{ color: var(--aurora); border-color: rgba(127,217,168,0.5); background: var(--aurora-dim); }
+
+.empty-state{ border: 1px dashed var(--line); border-radius: var(--radius); padding: 64px 32px; text-align:center; color: var(--text-dim); }
+.empty-state .glyph{ font-size: 26px; margin-bottom:14px; color: var(--gold); }
+.empty-state .sub{ font-family:'Manrope', sans-serif; font-size: 12.5px; margin-top: 10px; color: var(--text-faint); }
+.empty-state .btn{ margin-top: 20px; }
+
+footer{ margin-top: 64px; padding: 32px 0; border-top: 1px solid var(--line-soft); font-family:'Manrope', sans-serif; font-size: 12px; color: var(--text-faint); text-align:center; line-height:1.6; }
+.hidden{ display:none !important; }
+::-webkit-scrollbar{ width:6px; }
+::-webkit-scrollbar-thumb{ background: var(--line); border-radius:3px; }
+CSSEOF
+echo "styles.css rewritten: $(wc -l < /home/claude/velora/styles.css) lines"
