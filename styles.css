@@ -1,6 +1,5 @@
-cat > /home/claude/velora/styles.css << 'CSSEOF'
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
+ 
 :root{
   --void: #0B0C1F;
   --nightsky: #12142E;
@@ -42,9 +41,9 @@ body{
 ::selection{ background: var(--gold-dim); color: var(--gold); }
 a{ color: inherit; text-decoration: none; }
 .wrap{ max-width: 1220px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
-
+ 
 #starfield{ position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-
+ 
 /* ============ NAV ============ */
 .nav{ border-bottom: 1px solid var(--line-soft); padding: 20px 0; position: sticky; top: 0; z-index: 50; background: rgba(11,12,31,0.82); backdrop-filter: blur(14px); }
 .nav-inner{ display:flex; align-items:center; justify-content:space-between; gap: 24px; flex-wrap: wrap; }
@@ -58,32 +57,32 @@ a{ color: inherit; text-decoration: none; }
 .nav-status{ display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); }
 .nav-status .dot{ width:7px; height:7px; border-radius:50%; background: var(--line); }
 .nav-status .dot.live{ background: var(--aurora); box-shadow: 0 0 8px rgba(95,224,184,0.7); }
-
+ 
 /* ============ SHARED PAGE ELEMENTS ============ */
 .page{ padding: 52px 0 120px; }
 .page-head{ margin-bottom: 36px; }
 .page-head .eyebrow{ font-family:'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
 .page-head h1{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 36px; margin: 0 0 12px; letter-spacing: -0.01em; color: var(--text); }
 .page-head p{ font-family:'Manrope', sans-serif; font-size: 15.5px; color: var(--text-dim); max-width: 580px; line-height: 1.65; margin:0; }
-
+ 
 .panel{ background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
 .panel + .panel{ margin-top:18px; }
 .panel h2{ font-family:'Space Grotesk', sans-serif; font-size: 14px; font-weight:700; letter-spacing:0.01em; color: var(--text); margin: 0 0 4px; }
 .panel .sub{ font-family:'Manrope', sans-serif; font-size:12.5px; color:var(--text-faint); margin: 0 0 18px; line-height:1.5; }
-
+ 
 label{ display:block; font-family:'Manrope', sans-serif; font-size: 11.5px; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; color: var(--text-dim); margin: 18px 0 8px; }
 label:first-of-type{ margin-top:0; }
 input[type=text], textarea{ width:100%; background: var(--void); border: 1px solid var(--line); border-radius: var(--radius-sm); color: var(--text); font-family:'Manrope', sans-serif; font-size: 14.5px; padding: 12px 14px; resize: vertical; transition: border-color .15s ease; }
 textarea{ min-height: 66px; line-height:1.55; }
 input[type=text]:focus, textarea:focus{ outline: none; border-color: var(--gold); }
 input[type=text]::placeholder, textarea::placeholder{ color: var(--text-faint); }
-
+ 
 .chip-row{ display:flex; flex-wrap:wrap; gap:8px; }
 .chip{ font-family:'Manrope', sans-serif; font-size: 12.5px; font-weight: 600; padding: 8px 15px; border-radius: 999px; border: 1px solid var(--line); color: var(--text-dim); cursor:pointer; user-select:none; transition: all .15s ease; background: none; }
 .chip:hover{ border-color: var(--text-faint); }
 .chip.active{ border-color: var(--aurora); color: var(--aurora); background: var(--aurora-dim); }
 .chip:focus-visible, .btn:focus-visible, .icon-btn:focus-visible{ outline: 2px solid var(--gold); outline-offset:2px; }
-
+ 
 .btn{ background: linear-gradient(135deg, #F7C878, #EAA23C); color: #241704; border: none; border-radius: var(--radius-sm); font-family:'Space Grotesk', sans-serif; font-weight:700; font-size: 14.5px; letter-spacing:0.01em; padding: 14px 22px; cursor:pointer; transition: filter .15s ease, transform .1s ease; display:inline-flex; align-items:center; gap:8px; }
 .btn:hover{ filter: brightness(1.07); }
 .btn:active{ transform: translateY(1px); }
@@ -94,9 +93,9 @@ input[type=text]::placeholder, textarea::placeholder{ color: var(--text-faint); 
 .btn.ghost{ background:transparent; border:1px solid var(--line); color: var(--text-dim); }
 .btn.ghost:hover{ border-color: var(--text-faint); color: var(--text); filter:none; }
 .btn.violet{ background: linear-gradient(135deg, #B6A4FF, #8A72F0); color: #14102E; }
-
+ 
 .hint{ font-family:'Manrope', sans-serif; font-size: 12px; color: var(--text-faint); margin-top: 12px; line-height:1.6; }
-
+ 
 .badge{ font-family:'JetBrains Mono', monospace; font-size: 10px; text-transform:uppercase; letter-spacing:0.04em; padding: 4px 10px; border-radius: 999px; border:1px solid var(--line); color: var(--text-dim); white-space:nowrap; }
 .badge.type-job{ color:var(--gold); border-color: rgba(240,178,78,0.4); background: var(--gold-dim); }
 .badge.type-internship{ color:var(--aurora); border-color: rgba(95,224,184,0.4); background: var(--aurora-dim); }
@@ -104,17 +103,17 @@ input[type=text]::placeholder, textarea::placeholder{ color: var(--text-faint); 
 .badge.type-athletic{ color:var(--violet); border-color: rgba(155,135,245,0.4); background: var(--violet-dim); }
 .badge.deadline{ color: var(--danger); border-color: rgba(242,122,107,0.45); background: var(--danger-dim); }
 .badge.new{ color: var(--aurora); border-color: rgba(95,224,184,0.5); background: var(--aurora-dim); }
-
+ 
 .empty-state{ border: 1px dashed var(--line); border-radius: var(--radius); padding: 64px 32px; text-align:center; color: var(--text-dim); }
 .empty-state .glyph{ font-size: 26px; margin-bottom:14px; color: var(--gold); }
 .empty-state .sub{ font-family:'Manrope', sans-serif; font-size: 12.5px; margin-top: 10px; color: var(--text-faint); }
 .empty-state .btn{ margin-top: 20px; }
-
+ 
 footer{ margin-top: 64px; padding: 32px 0; border-top: 1px solid var(--line-soft); font-family:'Manrope', sans-serif; font-size: 12px; color: var(--text-faint); text-align:center; line-height:1.6; }
 .hidden{ display:none !important; }
 ::-webkit-scrollbar{ width:6px; }
 ::-webkit-scrollbar-thumb{ background: var(--line); border-radius:3px; }
-
+ 
 /* ============ ROLE PICKER (marketing site) ============ */
 .role-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 40px; }
 @media (max-width: 800px){ .role-grid{ grid-template-columns: 1fr; } }
@@ -123,7 +122,7 @@ footer{ margin-top: 64px; padding: 32px 0; border-top: 1px solid var(--line-soft
 .role-card .ricon{ font-size: 26px; margin-bottom: 14px; }
 .role-card h3{ font-family:'Space Grotesk', sans-serif; font-size: 17px; margin: 0 0 8px; }
 .role-card p{ font-family:'Manrope', sans-serif; font-size: 13px; color: var(--text-dim); line-height: 1.55; margin: 0; }
-
+ 
 /* ============ METIS FLOATING WIDGET ============ */
 .chat-launcher{ position: fixed; bottom: 26px; right: 26px; z-index: 60; width: 62px; height: 62px; border-radius: 50%; background: linear-gradient(135deg, #F7C878, #EAA23C); color: #241704; border: none; cursor: pointer; display:flex; align-items:center; justify-content:center; box-shadow: 0 10px 30px rgba(240,178,78,0.35); transition: transform .18s ease, filter .18s ease; }
 .chat-launcher:hover{ transform: scale(1.06); filter: brightness(1.06); }
@@ -160,7 +159,7 @@ footer{ margin-top: 64px; padding: 32px 0; border-top: 1px solid var(--line-soft
 .chat-send{ background: linear-gradient(135deg, #F7C878, #EAA23C); color:#241704; border:none; border-radius: var(--radius-sm); width:40px; height:40px; flex-shrink:0; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; transition: filter .15s ease; }
 .chat-send:hover{ filter: brightness(1.08); }
 .chat-send:disabled{ opacity:0.5; cursor:default; }
-
+ 
 /* ============ ROADMAP ============ */
 .roadmap-track{ position: relative; padding-left: 6px; }
 .roadmap-step{ position: relative; padding: 0 0 26px 34px; }
@@ -173,10 +172,9 @@ footer{ margin-top: 64px; padding: 32px 0; border-top: 1px solid var(--line-soft
 .roadmap-step h4{ font-family:'Space Grotesk', sans-serif; font-size: 14.5px; margin: 0 0 4px; color: var(--text); }
 .roadmap-step p{ font-family:'Manrope', sans-serif; font-size: 12.5px; color: var(--text-dim); margin: 0; line-height: 1.5; }
 .roadmap-stage-badge{ font-family:'JetBrains Mono', monospace; font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); margin-top: 6px; display:inline-block; }
-
+ 
 .stat-row{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .stat-box{ background: var(--void); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 16px; }
 .stat-box .snum{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 24px; color: var(--text); }
 .stat-box .slabel{ font-family:'JetBrains Mono', monospace; font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); margin-top: 4px; }
-CSSEOF
-echo "styles.css rebuilt: $(wc -l < /home/claude/velora/styles.css) lines"
+ 
